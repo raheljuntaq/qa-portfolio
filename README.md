@@ -25,7 +25,7 @@ All projects in this repository are built on public practice applications (for e
 | --- | --- | --- | --- |
 | 1 | Test cases: SauceDemo | Test case design for login, cart, and checkout (positive, negative, and edge cases) | [View](https://docs.google.com/spreadsheets/d/1GFKbzsiecyTuEXACxuJ7L8-b9V6ESy9Wk3OA1howPhY/edit?usp=sharing) |
 | 2 | Bug reports: SauceDemo | Clear, reproducible bug reports with severity and evidence | [View](https://docs.google.com/spreadsheets/d/1GFKbzsiecyTuEXACxuJ7L8-b9V6ESy9Wk3OA1howPhY/edit?usp=sharing) |
-| 3 | API testing: ReqRes | Postman collection with status, schema, and response-time assertions | [View](./api-testing) |
+| 3 | API testing: JSONPlaceholder | Postman collection with status, schema, and response-time assertions | [View](https://github.com/raheljuntaq/qa-portfolio/tree/main/api-testing) |
 | 4 | Automation: SauceDemo | Playwright/Selenium scripts for login, add to cart, and checkout | [View](./automation) |
 | 5 | Case study | End-to-end testing approach, from manual test cases to automation | [Read](./case-study.md) |
  
