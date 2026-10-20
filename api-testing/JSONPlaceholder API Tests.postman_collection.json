@@ -1,0 +1,548 @@
+{
+  "info": {
+    "_postman_id": "ac87e0d0-5e4b-4770-a1e2-3b910ace1289",
+    "name": "JSONPlaceholder API Tests",
+    "description": "API test collection for a QA portfolio, built on JSONPlaceholder (https://jsonplaceholder.typicode.com), a free public fake API.\n\nNote: JSONPlaceholder accepts write requests (POST, PUT, PATCH, DELETE) but does not save the data, so the tests verify the response only.\n\nRun the whole collection with the Collection Runner. Request names use the pattern TC-API-[RESOURCE]-[NUMBER].",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "59076253",
+    "_collection_link": "https://go.postman.co/collection/59076253-ac87e0d0-5e4b-4770-a1e2-3b910ace1289?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Posts",
+      "item": [
+        {
+          "name": "TC-API-POSTS-01 Get all posts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\npm.test(\"Response time is below 2000 ms\", function () {\n    pm.expect(pm.response.responseTime).to.be.below(2000);\n});\npm.test(\"Content-Type is JSON\", function () {\n    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\n});\n\nconst posts = pm.response.json();\npm.test(\"Response is an array of 100 posts\", function () {\n    pm.expect(posts).to.be.an(\"array\").with.lengthOf(100);\n});\npm.test(\"First post has the expected fields and data types\", function () {\n    pm.expect(posts[0]).to.have.all.keys(\"userId\", \"id\", \"title\", \"body\");\n    pm.expect(posts[0].userId).to.be.a(\"number\");\n    pm.expect(posts[0].id).to.be.a(\"number\");\n    pm.expect(posts[0].title).to.be.a(\"string\").and.not.empty;\n    pm.expect(posts[0].body).to.be.a(\"string\").and.not.empty;\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts"
+              ]
+            },
+            "description": "Expected: 200 and a list of 100 posts. Each post has userId, id, title, and body with the correct data types."
+          },
+          "response": []
+        },
+        {
+          "name": "TC-API-POSTS-02 Get a single post",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Response time is below 2000 ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"Content-Type is JSON\", function () {",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+                  "});",
+                  "",
+                  "const post = pm.response.json();",
+                  "pm.test(\"Post id is 1\", function () {",
+                  "    pm.expect(post.id).to.eql(1);",
+                  "});",
+                  "pm.test(\"Post has the expected fields and data types\", function () {",
+                  "    pm.expect(post).to.have.all.keys(\"userId\", \"id\", \"title\", \"body\");",
+                  "    pm.expect(post.title).to.be.a(\"string\").and.not.empty;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts",
+                "1"
+              ]
+            },
+            "description": "Expected: 200 and the post with id 1."
+          },
+          "response": []
+        },
+        {
+          "name": "TC-API-POSTS-03 Filter posts by userId",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Response time is below 2000 ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"Content-Type is JSON\", function () {",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+                  "});",
+                  "",
+                  "const posts = pm.response.json();",
+                  "pm.test(\"Response is a non-empty array\", function () {",
+                  "    pm.expect(posts).to.be.an(\"array\").and.not.empty;",
+                  "});",
+                  "pm.test(\"Every post belongs to userId 1\", function () {",
+                  "    posts.forEach(function (post) {",
+                  "        pm.expect(post.userId).to.eql(1);",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts?userId=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts"
+              ],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Expected: 200 and only posts that belong to userId 1."
+          },
+          "response": []
+        },
+        {
+          "name": "TC-API-POSTS-04 Create a post",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test(\"Response time is below 2000 ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"Content-Type is JSON\", function () {",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+                  "});",
+                  "",
+                  "const sent = JSON.parse(pm.request.body.raw);",
+                  "const created = pm.response.json();",
+                  "pm.test(\"Response echoes the data that was sent\", function () {",
+                  "    pm.expect(created.title).to.eql(sent.title);",
+                  "    pm.expect(created.body).to.eql(sent.body);",
+                  "    pm.expect(created.userId).to.eql(sent.userId);",
+                  "});",
+                  "pm.test(\"A new id is returned\", function () {",
+                  "    pm.expect(created.id).to.be.a(\"number\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"QA portfolio test post\",\n  \"body\": \"Created from the Postman collection\",\n  \"userId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts"
+              ]
+            },
+            "description": "Expected: 201 and the created post echoes the data that was sent, with a new id. JSONPlaceholder does not save the data, so only the response is verified."
+          },
+          "response": []
+        },
+        {
+          "name": "TC-API-POSTS-05 Update a post (PUT)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Response time is below 2000 ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"Content-Type is JSON\", function () {",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+                  "});",
+                  "",
+                  "const sent = JSON.parse(pm.request.body.raw);",
+                  "const updated = pm.response.json();",
+                  "pm.test(\"Post id stays 1\", function () {",
+                  "    pm.expect(updated.id).to.eql(1);",
+                  "});",
+                  "pm.test(\"Response contains the updated data\", function () {",
+                  "    pm.expect(updated.title).to.eql(sent.title);",
+                  "    pm.expect(updated.body).to.eql(sent.body);",
+                  "    pm.expect(updated.userId).to.eql(sent.userId);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 1,\n  \"title\": \"Updated title\",\n  \"body\": \"Updated body\",\n  \"userId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts",
+                "1"
+              ]
+            },
+            "description": "Expected: 200 and the post is replaced with the data that was sent."
+          },
+          "response": []
+        },
+        {
+          "name": "TC-API-POSTS-06 Partially update a post (PATCH)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Response time is below 2000 ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"Content-Type is JSON\", function () {",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+                  "});",
+                  "",
+                  "const sent = JSON.parse(pm.request.body.raw);",
+                  "const patched = pm.response.json();",
+                  "pm.test(\"Title is updated\", function () {",
+                  "    pm.expect(patched.title).to.eql(sent.title);",
+                  "});",
+                  "pm.test(\"Other fields are still present\", function () {",
+                  "    pm.expect(patched.id).to.eql(1);",
+                  "    pm.expect(patched).to.have.property(\"userId\");",
+                  "    pm.expect(patched).to.have.property(\"body\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Only the title changes\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts",
+                "1"
+              ]
+            },
+            "description": "Expected: 200, the title is changed, and the other fields are still present."
+          },
+          "response": []
+        },
+        {
+          "name": "TC-API-POSTS-07 Delete a post",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Response time is below 2000 ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"Content-Type is JSON\", function () {",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+                  "});",
+                  "",
+                  "pm.test(\"Response body is empty\", function () {",
+                  "    pm.expect(pm.response.json()).to.be.empty;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts",
+                "1"
+              ]
+            },
+            "description": "Expected: 200 and an empty response body."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "TC-API-USERS-01 Get a user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Response time is below 2000 ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"Content-Type is JSON\", function () {",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+                  "});",
+                  "",
+                  "const user = pm.response.json();",
+                  "pm.test(\"User id is 1\", function () {",
+                  "    pm.expect(user.id).to.eql(1);",
+                  "});",
+                  "pm.test(\"Name and username are not empty\", function () {",
+                  "    pm.expect(user.name).to.be.a(\"string\").and.not.empty;",
+                  "    pm.expect(user.username).to.be.a(\"string\").and.not.empty;",
+                  "});",
+                  "pm.test(\"Email has a valid format\", function () {",
+                  "    pm.expect(user.email).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/);",
+                  "});",
+                  "pm.test(\"Address and company are objects\", function () {",
+                  "    pm.expect(user.address).to.be.an(\"object\");",
+                  "    pm.expect(user.address.geo).to.be.an(\"object\");",
+                  "    pm.expect(user.company).to.be.an(\"object\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "1"
+              ]
+            },
+            "description": "Expected: 200 and a user with a valid email, an address, and a company."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "TC-API-COMMENTS-01 Get comments of a post",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Response time is below 2000 ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"Content-Type is JSON\", function () {",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+                  "});",
+                  "",
+                  "const comments = pm.response.json();",
+                  "pm.test(\"Response is a non-empty array\", function () {",
+                  "    pm.expect(comments).to.be.an(\"array\").and.not.empty;",
+                  "});",
+                  "pm.test(\"Every comment belongs to post 1\", function () {",
+                  "    comments.forEach(function (comment) {",
+                  "        pm.expect(comment.postId).to.eql(1);",
+                  "    });",
+                  "});",
+                  "pm.test(\"Every comment has a valid email\", function () {",
+                  "    comments.forEach(function (comment) {",
+                  "        pm.expect(comment.email).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/);",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts/1/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts",
+                "1",
+                "comments"
+              ]
+            },
+            "description": "Expected: 200 and a list of comments that belong to post 1, each with a valid email."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Negative",
+      "item": [
+        {
+          "name": "TC-API-NEG-01 Get a post that does not exist",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "pm.test(\"Response time is below 2000 ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"Content-Type is JSON\", function () {",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+                  "});",
+                  "",
+                  "pm.test(\"Response body is empty\", function () {",
+                  "    pm.expect(pm.response.json()).to.be.empty;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts/9999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts",
+                "9999"
+              ]
+            },
+            "description": "Expected: 404 because post 9999 does not exist."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://jsonplaceholder.typicode.com"
+    }
+  ]
+}
