@@ -41,7 +41,6 @@ qa-portfolio/
 ├── bug-reports/       # Bug reports with screenshots or videos
 ├── api-testing/       # Postman collection and environment files
 ├── automation/        # Playwright/Selenium project with its own README
-└── case-study.md      # One-page case study
 ```
  
 ---
@@ -54,7 +53,6 @@ qa-portfolio/
 - **Approach:** prioritized scenarios by risk, wrote manual test cases, then automated the most stable and repeated ones.
 - **Findings:** documented in the [bug reports](./bug-reports).
 - **Next:** expand automation coverage and add API-level checks.
-Read the full write-up in [case-study.md](./case-study.md).
  
 ---
  
